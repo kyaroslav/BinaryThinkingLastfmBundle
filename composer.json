@@ -1,5 +1,5 @@
 {
-    "name": "binarythinking/lastfm-bundle",
+    "name": "kyaroslav/lastfm-bundle",
     "type": "symfony-bundle",
     "description": "Use Last.fm API in your Symfony 2 application.",
     "keywords": ["lastfm", "last.fm", "api"],
@@ -9,6 +9,12 @@
             "name": "Karol Sójko",
             "email": "karolsojko@gmail.com",
             "homepage": "http://blog.karolsojko.com"
+        },
+        {
+            "name": "Yaroslav Kovalenko",
+            "email": "yaroslav23@gmail.com",
+            "homepage": "https://github.com/kyaroslav",
+            "role": "Contributor"
         }
     ],
 
