@@ -35,9 +35,12 @@ class Album implements LastfmModelInterface
     protected $topTags = array();
     
     protected $tracks = array();
+
+    protected $rawResponse = '';
     
     public static function createFromResponse(\SimpleXMLElement $response){
         $album = new Album();
+        $album->setRawResponse($response);
         $album->setId((int) $response->id);
         $album->setName((string) $response->name);
         $artisNodeCount = count($response->artist->children());
@@ -74,6 +77,22 @@ class Album implements LastfmModelInterface
         }
         
         return $album;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawResponse()
+    {
+        return $this->rawResponse;
+    }
+
+    /**
+     * @param string $rawResponse
+     */
+    public function setRawResponse($rawResponse)
+    {
+        $this->rawResponse = $rawResponse;
     }
 
     public function getId()

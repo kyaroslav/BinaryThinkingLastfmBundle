@@ -30,10 +30,13 @@ class Track implements LastfmModelInterface
     protected $artist;
     
     protected $images = array();
+
+    protected $rawResponse = '';
     
     public static function createFromResponse(\SimpleXMLElement $response)
     {
         $track = new Track();
+        $track->setRawResponse($response->asXML());
         $trackAttributes = $response->attributes();
         if(isset($trackAttributes->rank)){
             $track->setNumber((int) $trackAttributes->rank);
@@ -61,6 +64,22 @@ class Track implements LastfmModelInterface
         $track->setImages($images);
         
         return $track;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawResponse()
+    {
+        return $this->rawResponse;
+    }
+
+    /**
+     * @param string $rawResponse
+     */
+    public function setRawResponse($rawResponse)
+    {
+        $this->rawResponse = $rawResponse;
     }
     
     public function getNumber()

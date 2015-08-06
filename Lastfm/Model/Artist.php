@@ -32,10 +32,13 @@ class Artist implements LastfmModelInterface
     protected $bio = array();
     
     protected $weight;
+
+    protected $rawResponse = '';
     
     public static function createFromResponse(\SimpleXMLElement $response)
     {
         $artist = new Artist();
+        $artist->setRawResponse($response->asXML());
         $artist->setName((string) $response->name);
         $artist->setMbid((string) $response->mbid);
         $artist->setUrl((string) $response->url);
@@ -91,6 +94,22 @@ class Artist implements LastfmModelInterface
         $artist->setWeight((int) $response->weight);
         
         return $artist;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawResponse()
+    {
+        return $this->rawResponse;
+    }
+
+    /**
+     * @param string $rawResponse
+     */
+    public function setRawResponse($rawResponse)
+    {
+        $this->rawResponse = $rawResponse;
     }
     
     public function getName()

@@ -74,8 +74,9 @@ class ArtistMethodsClient extends LastfmAPIClient
      * @param string $lang the language to return the biography in, expressed as an ISO 639 alpha-2 code
      * @param string $username the username for the context of the request. If supplied, the user's playcount for this artist is included in the response
      * @param bool $autocorrect transform misspelled artist names into correct artist names, returning the correct version instead. The corrected artist name will be returned in the response
+     * @param string $saveXmlFilePath path to save raw xml response
      */
-    public function getInfo($artist, $mbid = null, $lang = null, $username = null, $autocorrect = true)
+    public function getInfo($artist, $mbid = null, $lang = null, $username = null, $autocorrect = true, $saveXmlFilePath = '')
     {
         $response = $this->call(array(
             'method' => 'artist.getInfo',
@@ -85,8 +86,15 @@ class ArtistMethodsClient extends LastfmAPIClient
             'username' => $username,
             'autocorrect' => $autocorrect
         ));
-        
+
         if(!empty($response->artist)){
+            if(!empty($saveXmlFilePath)){
+                try {
+                    $response->saveXML($saveXmlFilePath);
+                } catch (\Exception $e) {
+                    throw new \Exception('Unable to save xml response');
+                }
+            }
             $artist = LastfmModel\Artist::createFromResponse($response->artist);
         }
         
@@ -217,8 +225,9 @@ class ArtistMethodsClient extends LastfmAPIClient
      * @param string $mbid the musicbrainz id for the artist
      * @param int $limit Limit the number of similar artists returned
      * @param bool $autocorrect transform misspelled artist names into correct artist names
+     * @param string $saveXmlFilePath path to save raw xml response
      */
-    public function getSimilar($artist, $mbid = null, $limit = null, $autocorrect = true)
+    public function getSimilar($artist, $mbid = null, $limit = null, $autocorrect = true, $saveXmlFilePath = '')
     {
         $response = $this->call(array(
             'method' => 'artist.getSimilar',
@@ -230,6 +239,13 @@ class ArtistMethodsClient extends LastfmAPIClient
         
         $artists = array();
         if (!empty($response->similarartists->artist)) {
+            if(!empty($saveXmlFilePath)){
+                try {
+                    $response->saveXML($saveXmlFilePath);
+                } catch (\Exception $e) {
+                    throw new \Exception('Unable to save xml response');
+                }
+            }
             foreach ($response->similarartists->artist as $similarArtist) {
                 $artists[] = LastfmModel\Artist::createFromResponse($similarArtist);
             }
@@ -278,8 +294,9 @@ class ArtistMethodsClient extends LastfmAPIClient
      * @param int $limit the number of results to fetch per page. Defaults to 50
      * @param int $page the page number to fetch. Defaults to first page
      * @param bool $autocorrect transform misspelled artist names into correct artist names
+     * @param string $saveXmlFilePath path to save raw xml response
      */
-    public function getTopTracks($artist, $mbid = null, $limit = null, $page = null, $autocorrect = true)
+    public function getTopTracks($artist, $mbid = null, $limit = null, $page = null, $autocorrect = true, $saveXmlFilePath = '')
     {
         $response = $this->call(array(
             'method' => 'artist.getTopTracks',
@@ -292,6 +309,13 @@ class ArtistMethodsClient extends LastfmAPIClient
         
         $tracks = array();
         if (!empty($response->toptracks->track)) {
+            if(!empty($saveXmlFilePath)){
+                try {
+                    $response->saveXML($saveXmlFilePath);
+                } catch (\Exception $e) {
+                    throw new \Exception('Unable to save xml response');
+                }
+            }
             foreach ($response->toptracks->track as $topTrack) {
                 $topTrackAttribues = $topTrack->attributes();
                 $topTrack = LastfmModel\Track::createFromResponse($topTrack);
